@@ -4,32 +4,60 @@
  * Используйте документацию Swagger (http://188.132.184.170.nip.io/api/v1/docs)
  */
 
-// TODO: Определите интерфейс User (Пользователь)
 export interface User {
-  // Подсказка: какие поля должны быть у пользователя?
+  id: string;
+  email: string;
+  username: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// TODO: Определите интерфейс Habit (Привычка)
 export interface Habit {
-  // Подсказка: какие поля должны быть у привычки?
+  id: string;
+  userId: string;
+  categoryId?: string;
+  title: string;
+  description?: string;
+  color: string;
+  icon: string;
+  frequencyType: "daily" | "weekly" | "monthly";
+  goal: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// TODO: Определите интерфейс HabitLog (Лог привычки)
 export interface HabitLog {
-  // Ваш код здесь
+  id: string;
+  habitId: string;
+  userId: string;
+  completedAt: string;
+  note?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// TODO: Определите интерфейс Category (Категория)
 export interface Category {
-  // Ваш код здесь
+  id: string;
+  userId: string;
+  name: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// TODO: Определите интерфейс Achievement (Достижение)
 export interface Achievement {
-  // Ваш код здесь
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  icon: string;
+  unlockedAt: string;
 }
 
-// TODO: Определите интерфейс AnalyticsSummary (Сводка аналитики)
 export interface AnalyticsSummary {
-  // Ваш код здесь
+  totalHabits: number;
+  completionRate: number;
+  currentStreak: number;
+  bestStreak: number;
+  totalLogs: number;
 }
