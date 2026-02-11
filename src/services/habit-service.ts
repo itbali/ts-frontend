@@ -6,11 +6,10 @@
  */
 
 import { mockHabits } from "../mocks/habits";
-// TODO: Раскомментировать после определения типов
-// import type { Habit, CreateHabitData, UpdateHabitData } from '../types';
+import type { Habit, CreateHabitData, UpdateHabitData } from "../types";
 
 // Временное хранилище (будет заменено на API)
-let habits: any[] = [...mockHabits];
+let habits: Habit[] = [...mockHabits] as Habit[];
 
 /**
  * ЗАДАЧА 1: Определить правильные типы
@@ -18,7 +17,7 @@ let habits: any[] = [...mockHabits];
  * Замените any на правильные типы из types/entities.ts и types/api.ts
  */
 
-export async function getAllHabits(): Promise<any[]> {
+export async function getAllHabits(): Promise<Habit[]> {
   // TODO: Заменить на реальный вызов API
   // return request<Habit[]>('/habits/');
 
@@ -26,16 +25,16 @@ export async function getAllHabits(): Promise<any[]> {
   return Promise.resolve([...habits]);
 }
 
-export async function getHabitById(id: string): Promise<any> {
+export async function getHabitById(id: string): Promise<Habit> {
   // TODO: Реализовать
   const habit = habits.find((h) => h.id === id);
   if (!habit) {
-    throw new Error("Habit not found");
+    throw new Error("Привычка не найдена");
   }
   return Promise.resolve(habit);
 }
 
-export async function createHabit(data: any): Promise<any> {
+export async function createHabit(data: CreateHabitData): Promise<Habit> {
   // TODO: Заменить на реальный вызов API
   // return request<Habit>('/habits/', {
   //   method: 'POST',
@@ -43,10 +42,15 @@ export async function createHabit(data: any): Promise<any> {
   // });
 
   // Пока что создаем в памяти
-  const newHabit = {
+  const newHabit: Habit = {
     id: `habit-${Date.now()}`,
     userId: "user-1",
-    ...data,
+    title: data.title,
+    description: data.description,
+    color: data.color || "#FF5733",
+    icon: data.icon || "📝",
+    frequencyType: data.frequencyType || "daily",
+    goal: data.goal || 1,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -55,18 +59,21 @@ export async function createHabit(data: any): Promise<any> {
   return Promise.resolve(newHabit);
 }
 
-export async function updateHabit(id: string, data: any): Promise<any> {
+export async function updateHabit(
+  id: string,
+  data: UpdateHabitData,
+): Promise<Habit> {
   // TODO: Реализовать с реальным API
   const index = habits.findIndex((h) => h.id === id);
   if (index === -1) {
-    throw new Error("Habit not found");
+    throw new Error("Привычка не найдена");
   }
 
   habits[index] = {
     ...habits[index],
     ...data,
     updatedAt: new Date().toISOString(),
-  };
+  } as Habit;
 
   return Promise.resolve(habits[index]);
 }

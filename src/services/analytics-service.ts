@@ -2,16 +2,20 @@
  * Сервис аналитики  - ЗАДАЧА СТУДЕНТА
  */
 
-export async function getAnalyticsSummary(): Promise<any> {
+import type { AnalyticsSummary, Achievement } from "../types";
+
+export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
   // TODO: Замените на реальный API вызов
   return Promise.resolve({
     totalHabits: 4,
     completionRate: 0.75,
     currentStreak: 3,
+    bestStreak: 5,
+    totalLogs: 10,
   });
 }
 
-export async function getAchievements(): Promise<any[]> {
+export async function getAchievements(): Promise<Achievement[]> {
   // TODO: Замените на реальный API вызов
   return Promise.resolve([]);
 }
