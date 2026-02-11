@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Трекер привычек</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Auth Section -->
+      <div id="auth-container">
+        <h1>Трекер привычек</h1>
+        <div class="tabs">
+          <button id="tab-login" class="active">Вход</button>
+          <button id="tab-register">Регистрация</button>
+        </div>
+
+        <form id="login-form">
+          <input type="email" id="login-email" placeholder="Email" required />
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="login-password"
+              placeholder="Пароль"
+              required
+            />
+            <button type="button" class="toggle-password" data-target="login-password">
+              👁️
+            </button>
+          </div>
+          <button type="submit">Войти</button>
+        </form>
+
+        <form id="register-form" style="display: none">
+          <input type="email" id="reg-email" placeholder="Email" required />
+          <input
+            type="text"
+            id="reg-username"
+            placeholder="Имя пользователя"
+            required
+          />
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="reg-password"
+              placeholder="Пароль"
+              required
+            />
+            <button type="button" class="toggle-password" data-target="reg-password">
+              👁️
+            </button>
+          </div>
+          <button type="submit">Зарегистрироваться</button>
+        </form>
+        <p id="auth-error" class="error"></p>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div id="dashboard-container" style="display: none">
+        <div class="dashboard-layout">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <div class="brand">
+                    <h2>HabitTrack</h2>
+                </div>
+                <nav>
+                    <button class="nav-btn active" data-view="habits">
+                        <span class="icon">📝</span> Привычки
+                    </button>
+                    <button class="nav-btn" data-view="analytics">
+                        <span class="icon">📊</span> Аналитика
+                    </button>
+                    <button class="nav-btn" data-view="achievements">
+                        <span class="icon">🏆</span> Достижения
+                    </button>
+                    <button class="nav-btn" data-view="history">
+                        <span class="icon">📜</span> История
+                    </button>
+                    <div class="spacer"></div>
+                    <button class="nav-btn" data-view="profile">
+                        <span class="icon">👤</span> Профиль
+                    </button>
+                    <button id="btn-logout-sidebar" class="nav-btn logout">
+                        <span class="icon">🚪</span> Выход
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                
+                <!-- View: Habits -->
+                <section id="view-habits" class="view-section active">
+                    <header class="view-header">
+                        <h2>Мои привычки</h2>
+                        <button id="btn-add-habit" class="primary-btn">+ Новая привычка</button>
+                    </header>
+                    <div id="habit-list" class="grid-container"></div>
+                </section>
+
+                <!-- View: Analytics -->
+                <section id="view-analytics" class="view-section" style="display: none;">
+                    <header class="view-header">
+                        <h2>Аналитика</h2>
+                    </header>
+                    <div id="analytics-content" class="analytics-grid">
+                        <div class="stat-card">
+                            <h3>Всего привычек</h3>
+                            <p id="stat-total-habits">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Процент выполнения</h3>
+                            <p id="stat-completion-rate">0%</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Текущая серия</h3>
+                            <p id="stat-streak">0 дней</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View: Achievements -->
+                <section id="view-achievements" class="view-section" style="display: none;">
+                    <header class="view-header">
+                        <h2>Достижения</h2>
+                    </header>
+                    <div id="achievements-list" class="grid-container">
+                        <!-- Badges rendered here -->
+                    </div>
+                </section>
+
+                <!-- View: History (Logs) -->
+                <section id="view-history" class="view-section" style="display: none;">
+                    <header class="view-header">
+                        <h2>История</h2>
+                    </header>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Привычка</th>
+                                <th>Заметка</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <!-- Logs rendered here -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- View: Profile -->
+                <section id="view-profile" class="view-section" style="display: none;">
+                    <header class="view-header">
+                        <h2>Профиль</h2>
+                    </header>
+                    <div class="profile-card">
+                        <div class="form-group">
+                            <label>Имя пользователя</label>
+                            <input type="text" id="profile-username" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="profile-email" readonly />
+                        </div>
+                        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                        <h3>Инструменты</h3>
+                        <div class="category-controls">
+                             <!-- Reusing category management here or keeping it in habits? Let's verify.. User asked for cleaner UI. 
+                                  Let's keep Categories Management inside Profile or as a Modal trigger. 
+                                  Actually, let's put Category Management as a tool here. -->
+                             <button id="btn-manage-categories" class="secondary-btn">Управление категориями</button>
+                             <button id="btn-export-data" class="secondary-btn">Экспорт данных (JSON)</button>
+                        </div>
+                         <!-- Category Section (Hidden/Toggleable) -->
+                        <div id="profile-categories-area" style="display:none; margin-top:20px;">
+                             <h4>Категории</h4>
+                             <div class="category-controls">
+                                <input type="text" id="new-cat-name" placeholder="Название" />
+                                <input type="color" id="new-cat-color" value="#3b82f6" style="height:40px; width:50px;" />
+                                <button id="btn-create-cat" class="primary-btn">Добавить</button>
+                             </div>
+                             <div id="category-list" class="grid-container" style="margin-top:10px;"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+      </div>
+
+      <!-- Add Habit Modal -->
+      <div id="modal-container" style="display: none">
+        <div class="modal">
+          <h3>Создать привычку</h3>
+        <div id="habit-preview-container" style="margin-bottom: 16px;">
+            <label style="font-size: 0.85em; color: var(--text-muted); display:block; margin-bottom:4px">Предпросмотр:</label>
+            <div id="habit-preview-card" class="habit-card">
+                <div class="habit-info">
+                    <h3 id="preview-title">Название привычки</h3>
+                    <span id="preview-streak" style="font-size: 0.85rem; color: #6b7280;">🔥 0 дней</span>
+                </div>
+                <div class="habit-actions">
+                    <button type="button" class="check-btn" style="border-color: #e5e7eb;">
+                        <span class="icon">✔</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+          <form id="create-habit-form">
+            <div class="form-group">
+                <label>Заголовок</label>
+                <input type="text" id="habit-title" placeholder="например, Читать 30 мин" required />
+            </div>
+            
+            
+
+            <div class="form-group">
+                <label>Иконка</label>
+                <div id="emoji-grid" class="emoji-grid">
+                    <!-- Emojis will be injected here via JS -->
+                </div>
+                <input type="hidden" id="habit-icon" value="📝" />
+            </div>
+
+            <div class="form-group">
+                <label>Цвет</label>
+                <input type="color" id="habit-color" value="#FF5733" style="width: 100%;" />
+            </div>
+            
+            <div class="form-group">
+                <label>Категория</label>
+                <select id="habit-category" style="width: 100%; padding: 8px;">
+                    <option value="">Нет</option>
+                </select>
+            </div>
+            
+            <div class="modal-actions">
+              <button type="button" id="btn-cancel-modal" class="secondary-btn">Отмена</button>
+              <button type="submit" class="primary-btn">Создать</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
