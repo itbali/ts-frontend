@@ -1,12 +1,12 @@
 /**
- * Auth Service - STUDENT TASK
+ * Сервис аутентификации - ЗАДАЧА СТУДЕНТА
  */
 
 import { mockUser } from "../mocks/user";
 
 export async function login(credentials: any): Promise<any> {
-  // TODO: Replace with real API call
-  // For now, just return mock data
+  // TODO: Заменить на реальный вызов API
+  // Пока что просто возвращаем мок-данные
   return Promise.resolve({
     accessToken: "mock-token-" + Date.now(),
     user: mockUser,
@@ -14,7 +14,7 @@ export async function login(credentials: any): Promise<any> {
 }
 
 export async function register(data: any): Promise<any> {
-  // TODO: Implement
+  // TODO: Реализовать
   return Promise.resolve({
     accessToken: "mock-token-" + Date.now(),
     user: { ...mockUser, ...data },
@@ -22,12 +22,12 @@ export async function register(data: any): Promise<any> {
 }
 
 export async function getCurrentUser(): Promise<any> {
-  // TODO: Replace with API call
+  // TODO: Заменить на вызов API
   return Promise.resolve(mockUser);
 }
 
 export async function logout(): void {
-  // TODO: Add API call if needed
+  // TODO: Добавить вызов API, если необходимо
   localStorage.removeItem("accessToken");
 }
 

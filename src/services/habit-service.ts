@@ -1,33 +1,33 @@
 /**
- * Habit Service - STUDENT TASK
+ * Сервис привычек - ЗАДАЧА СТУДЕНТА
  *
- * CURRENT STATE: Works with mock data
- * YOUR TASK: Replace with real API calls
+ * ТЕКУЩЕЕ СОСТОЯНИЕ: Работает с мок-данными
+ * ВАША ЗАДАЧА: Заменить на реальные вызовы API
  */
 
 import { mockHabits } from "../mocks/habits";
-// TODO: Uncomment after defining types
+// TODO: Раскомментировать после определения типов
 // import type { Habit, CreateHabitData, UpdateHabitData } from '../types';
 
-// Temporary storage (will be replaced with API)
+// Временное хранилище (будет заменено на API)
 let habits: any[] = [...mockHabits];
 
 /**
- * TASK 1: Define correct types
+ * ЗАДАЧА 1: Определить правильные типы
  *
- * Replace any with correct types from types/entities.ts and types/api.ts
+ * Замените any на правильные типы из types/entities.ts и types/api.ts
  */
 
 export async function getAllHabits(): Promise<any[]> {
-  // TODO: Replace with real API call
+  // TODO: Заменить на реальный вызов API
   // return request<Habit[]>('/habits/');
 
-  // For now, return mocks
+  // Пока что возвращаем моки
   return Promise.resolve([...habits]);
 }
 
 export async function getHabitById(id: string): Promise<any> {
-  // TODO: Implement
+  // TODO: Реализовать
   const habit = habits.find((h) => h.id === id);
   if (!habit) {
     throw new Error("Habit not found");
@@ -36,13 +36,13 @@ export async function getHabitById(id: string): Promise<any> {
 }
 
 export async function createHabit(data: any): Promise<any> {
-  // TODO: Replace with real API call
+  // TODO: Заменить на реальный вызов API
   // return request<Habit>('/habits/', {
   //   method: 'POST',
   //   body: JSON.stringify(data)
   // });
 
-  // For now, create in memory
+  // Пока что создаем в памяти
   const newHabit = {
     id: `habit-${Date.now()}`,
     userId: "user-1",
@@ -56,7 +56,7 @@ export async function createHabit(data: any): Promise<any> {
 }
 
 export async function updateHabit(id: string, data: any): Promise<any> {
-  // TODO: Implement with real API
+  // TODO: Реализовать с реальным API
   const index = habits.findIndex((h) => h.id === id);
   if (index === -1) {
     throw new Error("Habit not found");
@@ -72,7 +72,7 @@ export async function updateHabit(id: string, data: any): Promise<any> {
 }
 
 export async function deleteHabit(id: string): Promise<void> {
-  // TODO: Implement with real API
+  // TODO: Реализовать с реальным API
   const index = habits.findIndex((h) => h.id === id);
   if (index !== -1) {
     habits.splice(index, 1);
@@ -81,11 +81,11 @@ export async function deleteHabit(id: string): Promise<void> {
 }
 
 /**
- * TASK 2: API Integration
+ * ЗАДАЧА 2: Интеграция с API
  *
- * After defining types:
- * 1. Uncomment import { request } from '../api'
- * 2. Replace mock implementations with real API calls
- * 3. Add error handling
- * 4. Test with real backend
+ * После определения типов:
+ * 1. Раскомментировать import { request } from '../api'
+ * 2. Заменить мок-реализации на реальные вызовы API
+ * 3. Добавить обработку ошибок
+ * 4. Протестировать с реальным бэкендом
  */

@@ -14,10 +14,10 @@ import { loadAnalytics } from "./main/analytics";
 import { loadHistory } from "./main/history";
 import { loadAchievements } from "./main/achievements";
 
-// --- State ---
+// --- Состояние ---
 let currentUser: any = null;
 
-// --- DOM Elements ---
+// --- DOM элементы ---
 const authContainer = document.getElementById("auth-container")!;
 const dashboardContainer = document.getElementById("dashboard-container")!;
 const loginForm = document.getElementById("login-form") as HTMLFormElement;
@@ -28,12 +28,12 @@ const tabLogin = document.getElementById("tab-login")!;
 const tabRegister = document.getElementById("tab-register")!;
 const authError = document.getElementById("auth-error")!;
 
-// Sidebar & Views
+// Боковая панель и представления
 const navButtons = document.querySelectorAll(".nav-btn");
 const views = document.querySelectorAll(".view-section");
 const btnLogoutSidebar = document.getElementById("btn-logout-sidebar");
 
-// Profile View
+// Представление профиля
 const profileUsername = document.getElementById(
   "profile-username",
 ) as HTMLInputElement;
@@ -46,7 +46,7 @@ const profileCategoriesArea = document.getElementById(
 )!;
 const btnExportData = document.getElementById("btn-export-data")!;
 
-// --- Initialization ---
+// --- Инициализация ---
 async function init() {
   // Автоматический "логин" для демо (с моками)
   try {
@@ -83,7 +83,7 @@ async function showDashboard() {
   await switchView("habits");
 }
 
-// --- Auth Handlers ---
+// --- Обработчики аутентификации ---
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = (document.getElementById("login-email") as HTMLInputElement)
@@ -125,7 +125,7 @@ registerForm.addEventListener("submit", async (e) => {
   }
 });
 
-// --- Routing ---
+// --- Маршрутизация ---
 async function switchView(viewName: string) {
   navButtons.forEach((btn) => {
     if (btn.getAttribute("data-view") === viewName) btn.classList.add("active");
@@ -165,7 +165,7 @@ if (btnLogoutSidebar) {
   });
 }
 
-// --- Profile ---
+// --- Профиль ---
 function loadProfile() {
   if (currentUser) {
     profileUsername.value = currentUser.username || "";
@@ -199,7 +199,7 @@ if (btnExportData) {
   });
 }
 
-// --- Tab Switching ---
+// --- Переключение вкладок ---
 tabLogin.addEventListener("click", () => {
   tabLogin.classList.add("active");
   tabRegister.classList.remove("active");
@@ -214,5 +214,5 @@ tabRegister.addEventListener("click", () => {
   loginForm.style.display = "none";
 });
 
-// Start app
+// Запуск приложения
 init();

@@ -1,21 +1,21 @@
 /**
- * TASK: Define types for API requests and responses
+ * ЗАДАЧА: Определите типы для ответов API и ошибок
  */
 
-// TODO: Define generic type for successful response
+// TODO: Определите тип для успешного ответа, который содержит данные типа T
 export interface ApiSuccessResponse<T> {
-  // Hint: API returns { success: true, data: T }
+  // Подсказка: API возвращает { success: true, data: T }
 }
 
-// TODO: Define type for error response
+// TODO: Определите тип для ошибки API
 export interface ApiErrorResponse {
-  // Hint: API returns { success: false, error: { message, code?, details? } }
+  // Подсказка: API возвращает { success: false, error: { message, code?, details? } }
 }
 
-// TODO: Define union type for response
-export type ApiResponse<T> = /* Your code here */;
+// TODO: Определите общий тип для ответа API, который может быть либо успешным, либо ошибкой
+export type ApiResponse<T> = any/* Ваш код здесь */;
 
-// Auth types
+// Готовые типы для аутентификации и регистрации
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -27,42 +27,42 @@ export interface RegisterData {
   username: string;
 }
 
-// TODO: Define AuthResponse
+// TODO: Определите тип для ответа при аутентификации
 export interface AuthResponse {
-  // What does /auth/login return?
+  // Подсказка: что возвращает API при успешной аутентификации? (смотри документацию Swagger)
 }
 
-// TODO: Define types for creating a habit
+// TODO: Определите тип для создания привычки
 export interface CreateHabitData {
-  // What fields are needed to create a habit?
+  // Подсказка: какие поля нужны для создания привычки? (смотри документацию Swagger)
 }
 
-// TODO: Define types for updating a habit
+// TODO: Определите тип для обновления привычки (может быть частичным, так что используйте Partial?)
 export interface UpdateHabitData {
-  // All fields are optional (use Partial?)
+  // Все поля должны быть необязательными (используйте Partial?)
 }
 
-// TODO: Define types for creating a category
+// TODO: Определите тип для создания категории
 export interface CreateCategoryData {
-  // Your code here
+  // Ваш код здесь
 }
 
-// TODO: Define types for creating a log
+// TODO: Определите тип для создания лога привычки
 export interface CreateLogData {
-  // Your code here
+  // Ваш код здесь
 }
 
-// TODO: Implement type guards
+// TODO: Определите тип для создания достижения
 export function isSuccessResponse<T>(
   response: any
 ): response is ApiSuccessResponse<T> {
-  // Your code here
+  // Ваш код здесь
   return false;
 }
 
 export function isErrorResponse<T>(
   response: any
 ): response is ApiErrorResponse {
-  // Your code here
+  // Ваш код здесь
   return false;
 }

@@ -1,5 +1,5 @@
 /**
- * Category Service - STUDENT TASK
+ * Сервис категорий - ЗАДАЧА СТУДЕНТА
  */
 
 import { mockCategories } from "../mocks/categories";
@@ -7,12 +7,12 @@ import { mockCategories } from "../mocks/categories";
 let categories: any[] = [...mockCategories];
 
 export async function getAllCategories(): Promise<any[]> {
-  // TODO: Replace with API call
+  // TODO: Заменить на вызов API
   return Promise.resolve([...categories]);
 }
 
 export async function getCategoryById(id: string): Promise<any> {
-  // TODO: Implement
+  // TODO: Реализовать
   const category = categories.find((c) => c.id === id);
   if (!category) {
     throw new Error("Category not found");
@@ -21,7 +21,7 @@ export async function getCategoryById(id: string): Promise<any> {
 }
 
 export async function createCategory(data: any): Promise<any> {
-  // TODO: Replace with API call
+  // TODO: Заменить на вызов API
   const newCategory = {
     id: `cat-${Date.now()}`,
     userId: "user-1",
@@ -35,7 +35,7 @@ export async function createCategory(data: any): Promise<any> {
 }
 
 export async function updateCategory(id: string, data: any): Promise<any> {
-  // TODO: Implement
+  // TODO: Реализовать
   const index = categories.findIndex((c) => c.id === id);
   if (index === -1) {
     throw new Error("Category not found");
@@ -51,7 +51,7 @@ export async function updateCategory(id: string, data: any): Promise<any> {
 }
 
 export async function deleteCategory(id: string): Promise<void> {
-  // TODO: Implement
+  // TODO: Реализовать
   const index = categories.findIndex((c) => c.id === id);
   if (index !== -1) {
     categories.splice(index, 1);

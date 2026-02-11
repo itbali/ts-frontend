@@ -1,3 +1,3 @@
-// Re-export all types
+// Реэкспорт всех типов
 export * from "./entities";
 export * from "./api";

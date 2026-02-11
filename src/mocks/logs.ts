@@ -1,4 +1,4 @@
-// Mock logs data for development
+// Мок-данные логов для разработки
 export const mockLogs = [
   {
     id: "log-1",

@@ -1,4 +1,4 @@
-// Mock user data for development
+// Мок-данные пользователя для разработки
 export const mockUser = {
   id: "user-1",
   email: "student@example.com",

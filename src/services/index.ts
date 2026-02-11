@@ -1,4 +1,4 @@
-// Re-export all services
+// Реэкспорт всех сервисов
 export * as authService from "./auth-service";
 export * as habitService from "./habit-service";
 export * as logService from "./log-service";

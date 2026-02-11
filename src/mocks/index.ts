@@ -1,4 +1,4 @@
-// Re-export all mocks
+// Реэкспорт всех моков
 export * from "./habits";
 export * from "./logs";
 export * from "./categories";

@@ -1,5 +1,5 @@
 /**
- * Log Service - STUDENT TASK
+ * Сервис логов - ЗАДАЧА СТУДЕНТА
  */
 
 import { mockLogs } from "../mocks/logs";
@@ -7,17 +7,17 @@ import { mockLogs } from "../mocks/logs";
 let logs: any[] = [...mockLogs];
 
 export async function getAllLogs(): Promise<any[]> {
-  // TODO: Replace with API call
+  // TODO: Заменить на вызов API
   return Promise.resolve([...logs]);
 }
 
 export async function getLogsByHabit(habitId: string): Promise<any[]> {
-  // TODO: Implement
+  // TODO: Реализовать
   return Promise.resolve(logs.filter((l) => l.habitId === habitId));
 }
 
 export async function createLog(data: any): Promise<any> {
-  // TODO: Replace with API call
+  // TODO: Заменить на вызов API
   const newLog = {
     id: `log-${Date.now()}`,
     userId: "user-1",
@@ -32,7 +32,7 @@ export async function createLog(data: any): Promise<any> {
 }
 
 export async function deleteLog(id: string): Promise<void> {
-  // TODO: Implement
+  // TODO: Реализовать
   const index = logs.findIndex((l) => l.id === id);
   if (index !== -1) {
     logs.splice(index, 1);

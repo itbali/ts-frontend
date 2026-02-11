@@ -1,4 +1,4 @@
-// Mock habits data for development
+// Мок-данные привычек для разработки
 export const mockHabits = [
   {
     id: "1",

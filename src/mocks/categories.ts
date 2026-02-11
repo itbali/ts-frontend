@@ -1,4 +1,4 @@
-// Mock categories data for development
+// Мок-данные категорий для разработки
 export const mockCategories = [
   {
     id: "cat-1",
