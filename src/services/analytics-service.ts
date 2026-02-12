@@ -1,26 +1,18 @@
 /**
- * Сервис аналитики  - ЗАДАЧА СТУДЕНТА
+ * Сервис аналитики
  */
 
+import { request } from "../api";
 import type { AnalyticsSummary, Achievement } from "../types";
 
 export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
-  // TODO: Замените на реальный API вызов
-  return Promise.resolve({
-    totalHabits: 4,
-    completionRate: 0.75,
-    currentStreak: 3,
-    bestStreak: 5,
-    totalLogs: 10,
-  });
+  return request<AnalyticsSummary>("/analytics/");
 }
 
 export async function getAchievements(): Promise<Achievement[]> {
-  // TODO: Замените на реальный API вызов
-  return Promise.resolve([]);
+  return request<Achievement[]>("/achievements/");
 }
 
-export async function exportData(): Promise<any> {
-  // TODO: Имплементируйте
-  return Promise.resolve({});
+export async function exportData(): Promise<unknown> {
+  return request<unknown>("/data/export");
 }

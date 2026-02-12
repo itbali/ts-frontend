@@ -1,8 +1,8 @@
 /**
- * Сервис аутентификации - ЗАДАЧА СТУДЕНТА
+ * Сервис аутентификации
  */
 
-import { mockUser } from "../mocks/user";
+import { request } from "../api";
 import type {
   LoginCredentials,
   RegisterData,
@@ -11,32 +11,31 @@ import type {
 } from "../types";
 
 export async function login(
-  _credentials: LoginCredentials,
+  credentials: LoginCredentials,
 ): Promise<AuthResponse> {
-  // TODO: Заменить на реальный вызов API
-  // Пока что просто возвращаем мок-данные
-  return Promise.resolve({
-    accessToken: "mock-token-" + Date.now(),
-    user: mockUser as User,
+  return request<AuthResponse>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify(credentials),
   });
 }
 
 export async function register(data: RegisterData): Promise<AuthResponse> {
-  // TODO: Реализовать
-  return Promise.resolve({
-    accessToken: "mock-token-" + Date.now(),
-    user: { ...mockUser, ...data } as User,
+  return request<AuthResponse>("/auth/register", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
 }
 
 export async function getCurrentUser(): Promise<User> {
-  // TODO: Заменить на вызов API
-  return Promise.resolve(mockUser as User);
+  return request<User>("/auth/me");
 }
 
 export async function logout(): Promise<void> {
-  // TODO: Добавить вызов API, если необходимо
-  localStorage.removeItem("accessToken");
+  try {
+    await request<{ message: string }>("/auth/logout", { method: "POST" });
+  } finally {
+    localStorage.removeItem("accessToken");
+  }
 }
 
 export function isAuthenticated(): boolean {

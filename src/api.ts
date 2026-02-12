@@ -1,34 +1,62 @@
 /**
- * API Клиент - ЗАДАЧА СТУДЕНТА
- * 
- * @description Этот модуль отвечает за выполнение HTTP-запросов к API бэкенда.
- * Он должен обрабатывать аутентификацию, ошибки и возвращать типизированные данные.
- * 
- * @see http://188.132.184.170.nip.io/docs#/ для документации API
+ * API Клиент
  *
- * ЗАДАЧА: Реализовать HTTP-клиент для работы с API бэкенда
+ * HTTP-клиент для работы с API бэкенда.
+ * Обрабатывает аутентификацию, ошибки и возвращает типизированные данные.
+ *
+ * @see http://188.132.184.170.nip.io/docs#/ для документации API
  */
 
 const API_BASE_URL = "http://188.132.184.170.nip.io/api/v1";
 
 /**
- * TODO: Реализовать функцию запроса
+ * Типизированная ошибка API
+ */
+export class ApiError extends Error {
+  constructor(
+    public status: number,
+    public statusText: string,
+    public details?: unknown,
+  ) {
+    super(`HTTP ${status}: ${statusText}`);
+    this.name = "ApiError";
+  }
+}
+
+/**
+ * Преобразование snake_case ключей в camelCase (рекурсивно)
+ */
+function snakeToCamel(str: string): string {
+  return str.replace(/_([a-z])/g, (_, letter: string) => letter.toUpperCase());
+}
+
+function convertKeysToCamel(obj: unknown): unknown {
+  if (Array.isArray(obj)) {
+    return obj.map(convertKeysToCamel);
+  }
+  if (obj !== null && typeof obj === "object") {
+    return Object.fromEntries(
+      Object.entries(obj as Record<string, unknown>).map(([key, value]) => [
+        snakeToCamel(key),
+        convertKeysToCamel(value),
+      ]),
+    );
+  }
+  return obj;
+}
+
+/**
+ * Универсальная функция HTTP-запроса к API
  *
- * Эта функция должна:
- * 1. Выполнять HTTP-запросы к API
- * 2. Добавлять заголовок Authorization с токеном
- * 3. Обрабатывать ошибки
- * 4. Возвращать типизированные данные
- *
- * Подсказка: Используйте fetch API
+ * - Добавляет заголовок Authorization с токеном из localStorage
+ * - Обрабатывает HTTP ошибки (4xx, 5xx) через ApiError
+ * - Обрабатывает обёртку { success: true, data: T } и чистый формат T
+ * - Конвертирует snake_case ключи ответа в camelCase
  */
 export async function request<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T> {
-  // TODO: Ваш код здесь
-
-  // Пример базовой реализации (требует улучшения):
   const url = `${API_BASE_URL}${endpoint}`;
 
   const token = localStorage.getItem("accessToken");
@@ -38,27 +66,38 @@ export async function request<T>(
     ...options?.headers,
   };
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  let response: Response;
 
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP! статус: ${response.status}`);
+  try {
+    response = await fetch(url, {
+      ...options,
+      headers,
+    });
+  } catch {
+    throw new Error("Ошибка сети. Проверьте подключение к интернету.");
   }
 
-  const data = await response.json();
+  if (!response.ok) {
+    let details: unknown;
+    try {
+      details = await response.json();
+    } catch {
+      // тело ответа не JSON
+    }
+    throw new ApiError(response.status, response.statusText, details);
+  }
+
+  const json = await response.json();
 
   // API может возвращать { success: true, data: ... } или просто данные
-  // TODO: Обработать оба случая
-  return data.data || data;
-}
+  const rawData =
+    json !== null &&
+    typeof json === "object" &&
+    "success" in json &&
+    "data" in json
+      ? json.data
+      : json;
 
-/**
- * ДОПОЛНИТЕЛЬНЫЕ ЗАДАЧИ:
- *
- * 1. Добавить обработку ошибок с типизацией
- * 2. Реализовать логику повторных попыток для неудачных запросов
- * 3. Добавить перехватчики (interceptors) для запроса/ответа
- * 4. Реализовать кэширование для GET-запросов
- */
+  // Конвертируем snake_case ключи в camelCase
+  return convertKeysToCamel(rawData) as T;
+}
