@@ -143,8 +143,8 @@ import { User, Habit } from './types'; // TypeScript сам найдет index.t
 graph LR
     User[user.ts] -- "import { Habit }" --> Habit[habit.ts]
     Habit -- "import { User }" --> User
-    style User fill:#f96,stroke:#333
-    style Habit fill:#f96,stroke:#333
+    style User fill:#f96,stroke:#000,color:#000
+    style Habit fill:#f96,stroke:#000,color:#000
 ```
 
 ### Пример кода (Проблема)
@@ -178,7 +178,7 @@ export interface Habit {
 graph TD
     User[user.ts] --> Shared[types.ts]
     Habit[habit.ts] --> Shared
-    style Shared fill:#9f9,stroke:#333
+    style Shared fill:#9f9,stroke:#333, color:#000
 ```
 
 **Решение с выделением типов:**
