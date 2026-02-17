@@ -3,16 +3,9 @@
  */
 
 import { mockUser } from "../mocks/user";
-import type {
-  LoginCredentials,
-  RegisterData,
-  AuthResponse,
-  User,
-} from "../types";
+import { AuthResponse, LoginCredentials, RegisterData, User } from "../types";
 
-export async function login(
-  _credentials: LoginCredentials,
-): Promise<AuthResponse> {
+export async function login(_credentials: LoginCredentials): Promise<AuthResponse> {
   // TODO: Заменить на реальный вызов API
   // Пока что просто возвращаем мок-данные
   return Promise.resolve({
@@ -34,7 +27,7 @@ export async function getCurrentUser(): Promise<User> {
   return Promise.resolve(mockUser as User);
 }
 
-export async function logout(): Promise<void> {
+export function logout(): void {
   // TODO: Добавить вызов API, если необходимо
   localStorage.removeItem("accessToken");
 }
