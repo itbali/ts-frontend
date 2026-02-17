@@ -6,10 +6,10 @@
  */
 
 import { mockHabits } from "../mocks/habits";
-import type { Habit, CreateHabitData, UpdateHabitData } from "../types";
+import type { Habit, CreateHabitData, UpdateHabitData, ApiResponse } from '../types';
 
 // Временное хранилище (будет заменено на API)
-let habits: Habit[] = [...mockHabits] as Habit[];
+let habits: Habit[] = [...mockHabits];
 
 /**
  * ЗАДАЧА 1: Определить правильные типы
@@ -25,8 +25,7 @@ export async function getAllHabits(): Promise<Habit[]> {
   return Promise.resolve([...habits]);
 }
 
-export async function getHabitById(id: string): Promise<Habit> {
-  // TODO: Реализовать
+export async function getHabitById(id: Pick<Habit, "id">['id']): Promise<Habit> {
   const habit = habits.find((h) => h.id === id);
   if (!habit) {
     throw new Error("Привычка не найдена");
@@ -59,12 +58,9 @@ export async function createHabit(data: CreateHabitData): Promise<Habit> {
   return Promise.resolve(newHabit);
 }
 
-export async function updateHabit(
-  id: string,
-  data: UpdateHabitData,
-): Promise<Habit> {
+export async function updateHabit(data: UpdateHabitData): Promise<Habit> {
   // TODO: Реализовать с реальным API
-  const index = habits.findIndex((h) => h.id === id);
+  const index = habits.findIndex((h) => h.id === data.id);
   if (index === -1) {
     throw new Error("Привычка не найдена");
   }
@@ -79,7 +75,6 @@ export async function updateHabit(
 }
 
 export async function deleteHabit(id: string): Promise<void> {
-  // TODO: Реализовать с реальным API
   const index = habits.findIndex((h) => h.id === id);
   if (index !== -1) {
     habits.splice(index, 1);

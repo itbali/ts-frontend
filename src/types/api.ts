@@ -37,12 +37,12 @@ export interface AuthResponse {
 // --- Habits ---
 
 export type CreateHabitData = Pick<Habit, "title"> &
-  Partial<Pick<Habit, "description" 
+  Pick<Habit, "description" 
   | "color" 
   | "icon" 
   | "categoryId" 
   | "frequencyType" 
-  | "goal">>;
+  | "goal">;
 
 export type UpdateHabitData = Pick<Habit, "id"> & Partial<CreateHabitData>;
 
