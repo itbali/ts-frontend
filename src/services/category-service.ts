@@ -3,7 +3,7 @@
  */
 
 import { mockCategories } from "../mocks/categories";
-import type { Category, CreateCategoryData } from "../types";
+import type { Category, CreateCategoryData, UpdateCategoryData } from "../types";
 
 let categories: Category[] = [...mockCategories] as Category[];
 
@@ -12,7 +12,7 @@ export async function getAllCategories(): Promise<Category[]> {
   return Promise.resolve([...categories]);
 }
 
-export async function getCategoryById(id: string): Promise<Category> {
+export async function getCategoryById(id: Pick<Category,"id">["id"]): Promise<Category> {
   // TODO: Реализовать
   const category = categories.find((c) => c.id === id);
   if (!category) {
@@ -39,11 +39,10 @@ export async function createCategory(
 }
 
 export async function updateCategory(
-  id: string,
-  data: Partial<CreateCategoryData>,
+  data: UpdateCategoryData,
 ): Promise<Category> {
   // TODO: Реализовать
-  const index = categories.findIndex((c) => c.id === id);
+  const index = categories.findIndex((c) => c.id === data.id);
   if (index === -1) {
     throw new Error("Категория не найдена");
   }

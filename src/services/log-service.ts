@@ -12,7 +12,7 @@ export async function getAllLogs(): Promise<HabitLog[]> {
   return Promise.resolve([...logs]);
 }
 
-export async function getLogsByHabit(habitId: string): Promise<HabitLog[]> {
+export async function getLogsByHabit(habitId: Pick<HabitLog, "habitId">["habitId"]): Promise<HabitLog[]> {
   // TODO: Реализовать
   return Promise.resolve(logs.filter((l) => l.habitId === habitId));
 }

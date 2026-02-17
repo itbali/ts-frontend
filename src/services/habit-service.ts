@@ -6,7 +6,7 @@
  */
 
 import { mockHabits } from "../mocks/habits";
-import type { Habit, CreateHabitData, UpdateHabitData, ApiResponse } from '../types';
+import type { Habit, CreateHabitData, UpdateHabitData } from '../types';
 
 // Временное хранилище (будет заменено на API)
 let habits: Habit[] = [...mockHabits];
