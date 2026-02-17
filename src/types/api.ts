@@ -37,7 +37,12 @@ export interface AuthResponse {
 // --- Habits ---
 
 export type CreateHabitData = Pick<Habit, "title"> &
-  Partial<Pick<Habit, "description" | "color" | "icon" | "categoryId" | "frequencyType" | "goal">>;
+  Partial<Pick<Habit, "description" 
+  | "color" 
+  | "icon" 
+  | "categoryId" 
+  | "frequencyType" 
+  | "goal">>;
 
 export type UpdateHabitData = Pick<Habit, "id"> & Partial<CreateHabitData>;
 
@@ -53,17 +58,14 @@ export type UpdateCategoryData = Pick<Category, "id"> & Partial<CreateCategoryDa
 export type CreateLogData = Pick<HabitLog, "habitId"> &
   Partial<Pick<HabitLog, "completedAt" | "note">>;
 
-// TODO: Определите тип для создания достижения
 export function isSuccessResponse<T>(
-  response: any
+  response: ApiResponse<T>
 ): response is ApiSuccessResponse<T> {
-  // Ваш код здесь
-  return false;
+  return response.success === true;
 }
 
-export function isErrorResponse<T>(
-  response: any
+export function isErrorResponse(
+  response: ApiResponse<unknown>
 ): response is ApiErrorResponse {
-  // Ваш код здесь
-  return false;
+  return response.success === false;
 }
