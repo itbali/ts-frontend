@@ -8,13 +8,16 @@ export async function loadAnalytics() {
   try {
     const data = await analyticsService.getAnalyticsSummary();
     if (statTotalHabits)
-      statTotalHabits.textContent = data.totalHabits?.toString() || "0";
+      statTotalHabits.textContent =
+        (data.total_habits ?? data.totalHabits)?.toString() || "0";
     if (statCompletionRate) {
-      statCompletionRate.textContent = data.completionRate
-        ? `${Math.round(data.completionRate * 100)}%`
+      const rate = data.completion_rate ?? data.completionRate;
+      statCompletionRate.textContent = rate
+        ? `${Math.round(rate * 100)}%`
         : "Н/Д";
     }
-    if (statStreak) statStreak.textContent = `${data.currentStreak || 0} дней`;
+    if (statStreak)
+      statStreak.textContent = `${data.current_streak ?? data.currentStreak ?? 0} дней`;
   } catch (e) {
     console.warn("Ошибка аналитики", e);
   }
