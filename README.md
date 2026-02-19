@@ -41,8 +41,7 @@ npm run dev
 **Подсказки:**
 
 - Смотрите комментарии с TODO в коде
-- Используйте Swagger документацию: http://188.132.184.170.nip.io/api/v1/docs
-- Reference implementation: `../frontend/src/types/`
+- Используйте Swagger документацию: http://188.132.184.170.nip.io/docs#/
 
 ### Модуль 2: Сервисы с моками 
 
@@ -93,13 +92,6 @@ npm run dev
 1. Реализуйте валидаторы для email, password, habit title
 2. Добавьте валидацию перед отправкой на API
 3. Покажите пользователю понятные сообщения об ошибках
-
-## 📚 Документация
-
-### Backend API
-
-- **Base URL:** http://188.132.184.170.nip.io/api/v1
-- **Swagger Docs:** http://188.132.184.170.nip.io/api/v1/docs
 
 ### Основные endpoints:
 
