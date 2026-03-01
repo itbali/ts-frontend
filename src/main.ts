@@ -17,6 +17,29 @@ import { loadAchievements } from "./main/achievements";
 // --- Состояние ---
 let currentUser: any = null;
 
+// --- Тёмная тема ---
+function applyTheme(isDark: boolean) {
+  document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+  const icon = document.getElementById("theme-icon");
+  const label = document.getElementById("theme-label");
+  if (icon) icon.textContent = isDark ? "☀️" : "🌙";
+  if (label) label.textContent = isDark ? "Светлая тема" : "Тёмная тема";
+}
+
+const savedTheme = localStorage.getItem("theme");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+const isDarkOnLoad = savedTheme === "dark" || (!savedTheme && prefersDark);
+applyTheme(isDarkOnLoad);
+
+const btnThemeToggle = document.getElementById("btn-theme-toggle");
+if (btnThemeToggle) {
+  btnThemeToggle.addEventListener("click", () => {
+    const currentlyDark = document.documentElement.getAttribute("data-theme") === "dark";
+    applyTheme(!currentlyDark);
+    localStorage.setItem("theme", !currentlyDark ? "dark" : "light");
+  });
+}
+
 // --- DOM элементы ---
 const authContainer = document.getElementById("auth-container")!;
 const dashboardContainer = document.getElementById("dashboard-container")!;
