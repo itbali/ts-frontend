@@ -2,9 +2,11 @@
 
 // Сводка аналитики (GET /api/v1/analytics/)
 export const mockAnalyticsSummary = {
-  total_habits: 4,
-  completion_rate: 0.75,
-  current_streak: 5,
+  totalHabits: 4,
+  completionRate: 0.75,
+  currentStreak: 5,
+  bestStreak: 10,
+  totalLogs: 50,
 };
 
 // Календарь (GET /api/v1/analytics/calendar)
