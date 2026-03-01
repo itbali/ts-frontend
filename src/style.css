@@ -12,11 +12,24 @@
   --danger: #ef4444;
   --danger-bg: #fee2e2;
   --success: #10b981;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+}
+
+/* --- Тёмная тема --- */
+[data-theme="dark"] {
+  --bg-body: #0f172a;    /* Slate 900 */
+  --bg-surface: #1e293b; /* Slate 800 */
+  --text-main: #f1f5f9;  /* Slate 100 */
+  --text-muted: #94a3b8; /* Slate 400 */
+  --border: #334155;     /* Slate 700 */
+  --danger-bg: #450a0a;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -1px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -2px rgb(0 0 0 / 0.3);
 }
 
 * {
@@ -200,6 +213,8 @@ input, select {
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
   width: 100%;
+  background-color: var(--bg-surface);
+  color: var(--text-main);
 }
 
 input:focus, select:focus {
@@ -394,7 +409,7 @@ button {
 }
 
 .data-table th {
-    background: #f9fafb;
+    background: var(--bg-body);
     font-weight: 600;
     color: var(--text-muted);
 }
@@ -545,6 +560,37 @@ button {
 
 .modal-actions button {
     flex: 1;
+}
+
+/* --- Переключатель темы --- */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: all 0.2s;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--bg-body);
+    color: var(--text-main);
+}
+
+/* Плавный переход при смене темы */
+body, .sidebar, .main-content, .stat-card, .habit-card,
+.data-table, .profile-card, .modal-content, .modal,
+#auth-container, input, select {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
 /* --- Animations --- */
