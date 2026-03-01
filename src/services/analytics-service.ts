@@ -17,8 +17,6 @@ import {
 import type { AnalyticsSummary, Achievement } from "../types";
 // --- Аналитика (GET /api/v1/analytics/) ---
 
-export async function getAnalyticsSummary(): Promise<any> {
-
 export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
   // TODO: Замените на реальный API вызов
   // return request<AnalyticsSummary>('/analytics/');
