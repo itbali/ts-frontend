@@ -5,9 +5,9 @@
  * Он должен обрабатывать аутентификацию, ошибки и возвращать типизированные данные.
  * 
  * @see http://188.132.184.170.nip.io/docs#/ для документации API
- *
- * ЗАДАЧА: Реализовать HTTP-клиент для работы с API бэкенда
  */
+
+import type { ApiResponse, ApiErrorResponse } from "./types/api";
 
 const API_BASE_URL = "http://188.132.184.170.nip.io/api/v1";
 
@@ -26,11 +26,6 @@ export async function request<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T> {
-  // TODO: Ваш код здесь
-
-  // Пример базовой реализации (требует улучшения):
-  const url = `${API_BASE_URL}${endpoint}`;
-
   const token = localStorage.getItem("accessToken");
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -38,27 +33,53 @@ export async function request<T>(
     ...options?.headers,
   };
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  let response: Response;
 
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP! статус: ${response.status}`);
+  try {
+    response = await fetch(`${API_BASE_URL}${endpoint}`, { ...options, headers });
+  } catch {
+    throw {
+      success: false,
+      error: { message: "Нет соединения с сервером" },
+    } as ApiErrorResponse;
   }
 
-  const data = await response.json();
+  const body: ApiResponse<T> = await response.json();
 
-  // API может возвращать { success: true, data: ... } или просто данные
-  // TODO: Обработать оба случая
-  return data.data || data;
+  if (!body.success) {
+    throw body;
+  }
+
+  return body.data;
 }
 
-/**
- * ДОПОЛНИТЕЛЬНЫЕ ЗАДАЧИ:
- *
- * 1. Добавить обработку ошибок с типизацией
- * 2. Реализовать логику повторных попыток для неудачных запросов
- * 3. Добавить перехватчики (interceptors) для запроса/ответа
- * 4. Реализовать кэширование для GET-запросов
- */
+// ─── Удобные обёртки ──────────────────────────────────────────────────────────
+
+export function get<T>(endpoint: string): Promise<T> {
+  return request<T>(endpoint);
+}
+
+export function post<T>(endpoint: string, body?: unknown): Promise<T> {
+  return request<T>(endpoint, {
+    method: "POST",
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+}
+
+export function put<T>(endpoint: string, body?: unknown): Promise<T> {
+  return request<T>(endpoint, {
+    method: "PUT",
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+}
+
+export function patch<T>(endpoint: string, body?: unknown): Promise<T> {
+  return request<T>(endpoint, {
+    method: "PATCH",
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+}
+
+export function del<T = void>(endpoint: string): Promise<T> {
+  return request<T>(endpoint, { method: "DELETE" });
+}
