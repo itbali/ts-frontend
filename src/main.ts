@@ -128,13 +128,13 @@ loginForm.addEventListener("submit", async (e) => {
 
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = (document.getElementById("register-email") as HTMLInputElement)
+  const email = (document.getElementById("reg-email") as HTMLInputElement)
     .value;
   const password = (
-    document.getElementById("register-password") as HTMLInputElement
+    document.getElementById("reg-password") as HTMLInputElement
   ).value;
   const username = (
-    document.getElementById("register-username") as HTMLInputElement
+    document.getElementById("reg-username") as HTMLInputElement
   ).value;
 
   try {

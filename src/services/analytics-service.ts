@@ -1,81 +1,74 @@
 /**
- * Сервис аналитики  - ЗАДАЧА СТУДЕНТА
+ * Сервис аналитики
  */
 
-import {
-  mockAnalyticsSummary,
-  mockCalendar,
-  mockHeatmap,
-  mockTrends,
-  mockCompletionRate,
-} from "../mocks/analytics";
-import {
-  mockAchievements,
-  mockAvailableAchievements,
-} from "../mocks/achievements";
-
+import { get } from "../api";
 import type { AnalyticsSummary, Achievement } from "../types";
+
 // --- Аналитика (GET /api/v1/analytics/) ---
 
 export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
-  // TODO: Замените на реальный API вызов
-  // return request<AnalyticsSummary>('/analytics/');
-  return Promise.resolve({ ...mockAnalyticsSummary });
+  return get<AnalyticsSummary>("/analytics/");
 }
 
 export async function getCalendar(
-  _startDate?: string,
-  _endDate?: string,
-  _habitIds?: string[],
+  startDate?: string,
+  endDate?: string,
+  habitIds?: string[],
 ): Promise<any[]> {
-  // TODO: Замените на реальный API вызов
-  // return request<CalendarDay[]>('/analytics/calendar', { params: { startDate, endDate, habitIds } });
-  return Promise.resolve([...mockCalendar]);
+  const params = new URLSearchParams();
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  if (habitIds?.length) params.set("habitIds", habitIds.join(","));
+  const qs = params.toString();
+  return get<any[]>(`/analytics/calendar${qs ? `?${qs}` : ""}`);
 }
 
 export async function getHeatmap(
-  _startDate?: string,
-  _endDate?: string,
+  startDate?: string,
+  endDate?: string,
 ): Promise<any[]> {
-  // TODO: Замените на реальный API вызов
-  // return request<HeatmapItem[]>('/analytics/heatmap', { params: { startDate, endDate } });
-  return Promise.resolve([...mockHeatmap]);
+  const params = new URLSearchParams();
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  const qs = params.toString();
+  return get<any[]>(`/analytics/heatmap${qs ? `?${qs}` : ""}`);
 }
 
 export async function getTrends(
-  _startDate?: string,
-  _endDate?: string,
-  _groupBy?: "week" | "month",
+  startDate?: string,
+  endDate?: string,
+  groupBy?: "week" | "month",
 ): Promise<any[]> {
-  // TODO: Замените на реальный API вызов
-  // return request<TrendItem[]>('/analytics/trends', { params: { startDate, endDate, groupBy } });
-  return Promise.resolve([...mockTrends]);
+  const params = new URLSearchParams();
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  if (groupBy) params.set("groupBy", groupBy);
+  const qs = params.toString();
+  return get<any[]>(`/analytics/trends${qs ? `?${qs}` : ""}`);
 }
 
 export async function getCompletionRate(
-  _startDate?: string,
-  _endDate?: string,
+  startDate?: string,
+  endDate?: string,
 ): Promise<any> {
-  // TODO: Замените на реальный API вызов
-  // return request<CompletionRateData>('/analytics/completion-rate', { params: { startDate, endDate } });
-  return Promise.resolve({ ...mockCompletionRate });
+  const params = new URLSearchParams();
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  const qs = params.toString();
+  return get<any>(`/analytics/completion-rate${qs ? `?${qs}` : ""}`);
 }
 
 // --- Достижения (GET /api/v1/achievements/) ---
 
 export async function getAchievements(): Promise<Achievement[]> {
-  // TODO: Замените на реальный API вызов
-  // return request<AchievementRead[]>('/achievements/');
-  return Promise.resolve([...mockAchievements]);
+  return get<Achievement[]>("/achievements/");
 }
 
 export async function getAvailableAchievements(): Promise<any[]> {
-  // TODO: Замените на реальный API вызов
-  // return request<AvailableAchievement[]>('/achievements/available');
-  return Promise.resolve([...mockAvailableAchievements]);
+  return get<any[]>("/achievements/available");
 }
 
 export async function exportData(): Promise<any> {
-  // TODO: Имплементируйте
-  return Promise.resolve({});
+  return get<any>("/analytics/export");
 }
