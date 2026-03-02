@@ -1,5 +1,6 @@
 import * as habitService from "../services/habit-service";
 import { fetchAllLogs, setTodaysLogs, todaysLogs, toggleHabitLog } from "./logs";
+import { validateHabitTitle, validateAll } from "../utils/validators";
 
 export let habits: any[] = [];
 
@@ -153,10 +154,13 @@ if (habitTitleInput && habitColorInput) {
 if (createHabitForm) {
   createHabitForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const title = (document.getElementById("habit-title") as HTMLInputElement).value;
+    const titleInput = document.getElementById("habit-title") as HTMLInputElement;
+    const title = titleInput.value;
     const color = (document.getElementById("habit-color") as HTMLInputElement).value;
     const icon = (document.getElementById("habit-icon") as HTMLInputElement).value;
     const categoryId = habitCategorySelect?.value;
+
+    if (!validateAll(validateHabitTitle(title))) return;
 
     const payload: any = {
       title,
@@ -172,7 +176,7 @@ if (createHabitForm) {
       await habitService.createHabit(payload);
       modalContainer.style.display = "none";
       await fetchHabits();
-      (document.getElementById("habit-title") as HTMLInputElement).value = "";
+      titleInput.value = "";
     } catch (e) {
       alert("Ошибка при создании");
     }

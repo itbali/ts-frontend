@@ -13,6 +13,12 @@ import { fetchCategories, renderCategories } from "./main/categories";
 import { loadAnalytics } from "./main/analytics";
 import { loadHistory } from "./main/history";
 import { loadAchievements } from "./main/achievements";
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+  validateAll,
+} from "./utils/validators";
 
 // --- Состояние ---
 let currentUser: any = null;
@@ -49,6 +55,7 @@ const registerForm = document.getElementById(
 ) as HTMLFormElement;
 const tabLogin = document.getElementById("tab-login")!;
 const tabRegister = document.getElementById("tab-register")!;
+// @ts-ignore used for auth error display
 const authError = document.getElementById("auth-error")!;
 
 // Боковая панель и представления
@@ -109,11 +116,10 @@ async function showDashboard() {
 // --- Обработчики аутентификации ---
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = (document.getElementById("login-email") as HTMLInputElement)
-    .value;
-  const password = (
-    document.getElementById("login-password") as HTMLInputElement
-  ).value;
+  const email = (document.getElementById("login-email") as HTMLInputElement).value;
+  const password = (document.getElementById("login-password") as HTMLInputElement).value;
+
+  if (!validateAll(validateEmail(email), validatePassword(password))) return;
 
   try {
     const result = await authService.login({ email, password });
@@ -121,21 +127,21 @@ loginForm.addEventListener("submit", async (e) => {
     currentUser = result.user;
     showDashboard();
   } catch (e) {
-    authError.textContent = "Ошибка входа";
-    authError.style.display = "block";
+    alert("Ошибка входа. Проверьте email и пароль.");
   }
 });
 
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = (document.getElementById("reg-email") as HTMLInputElement)
-    .value;
-  const password = (
-    document.getElementById("reg-password") as HTMLInputElement
-  ).value;
-  const username = (
-    document.getElementById("reg-username") as HTMLInputElement
-  ).value;
+  const email = (document.getElementById("reg-email") as HTMLInputElement).value;
+  const password = (document.getElementById("reg-password") as HTMLInputElement).value;
+  const username = (document.getElementById("reg-username") as HTMLInputElement).value;
+
+  if (!validateAll(
+    validateEmail(email),
+    validatePassword(password),
+    validateUsername(username),
+  )) return;
 
   try {
     const result = await authService.register({ email, password, username });
@@ -143,8 +149,7 @@ registerForm.addEventListener("submit", async (e) => {
     currentUser = result.user;
     showDashboard();
   } catch (e) {
-    authError.textContent = "Ошибка регистрации";
-    authError.style.display = "block";
+    alert("Ошибка регистрации. Попробуйте другой email.");
   }
 });
 
