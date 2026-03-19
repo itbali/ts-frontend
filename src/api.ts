@@ -44,7 +44,24 @@ export async function request<T>(
     } as ApiErrorResponse;
   }
 
-  const body: ApiResponse<T> = await response.json();
+  // Парсим JSON, ловим случай когда сервер вернул не-JSON
+  let body: ApiResponse<T>;
+  try {
+    body = await response.json();
+  } catch {
+    throw {
+      success: false,
+      error: { message: `Некорректный ответ сервера (${response.status})` },
+    } as ApiErrorResponse;
+  }
+
+  // HTTP ошибка без стандартной структуры { success, error }
+  if (!response.ok && body.success === undefined) {
+    throw {
+      success: false,
+      error: { message: `Ошибка сервера: ${response.status}` },
+    } as ApiErrorResponse;
+  }
 
   if (!body.success) {
     throw body;

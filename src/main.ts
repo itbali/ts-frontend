@@ -8,17 +8,12 @@
 import "./style.css";
 import * as authService from "./services/auth-service";
 import * as analyticsService from "./services/analytics-service";
+import { validateEmail, validatePassword } from "./utils/validators";
 import { habits, fetchHabits } from "./main/habits";
 import { fetchCategories, renderCategories } from "./main/categories";
 import { loadAnalytics } from "./main/analytics";
 import { loadHistory } from "./main/history";
 import { loadAchievements } from "./main/achievements";
-import {
-  validateEmail,
-  validatePassword,
-  validateUsername,
-  validateAll,
-} from "./utils/validators";
 
 // --- Состояние ---
 let currentUser: any = null;
@@ -55,7 +50,6 @@ const registerForm = document.getElementById(
 ) as HTMLFormElement;
 const tabLogin = document.getElementById("tab-login")!;
 const tabRegister = document.getElementById("tab-register")!;
-// @ts-ignore used for auth error display
 const authError = document.getElementById("auth-error")!;
 
 // Боковая панель и представления
@@ -116,40 +110,78 @@ async function showDashboard() {
 // --- Обработчики аутентификации ---
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = (document.getElementById("login-email") as HTMLInputElement).value;
-  const password = (document.getElementById("login-password") as HTMLInputElement).value;
+  const email = (document.getElementById("login-email") as HTMLInputElement)
+    .value;
+  const password = (
+    document.getElementById("login-password") as HTMLInputElement
+  ).value;
 
-  if (!validateAll(validateEmail(email), validatePassword(password))) return;
+  const emailErr = validateEmail(email);
+  if (!emailErr.valid) {
+    authError.textContent = emailErr.error;
+    authError.style.display = "block";
+    return;
+  }
+
+  const passErr = validatePassword(password);
+  if (!passErr.valid) {
+    authError.textContent = passErr.error;
+    authError.style.display = "block";
+    return;
+  }
 
   try {
     const result = await authService.login({ email, password });
     localStorage.setItem("accessToken", result.accessToken);
     currentUser = result.user;
+    authError.style.display = "none";
     showDashboard();
   } catch (e) {
-    alert("Ошибка входа. Проверьте email и пароль.");
+    authError.textContent = "Ошибка входа";
+    authError.style.display = "block";
   }
 });
 
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = (document.getElementById("reg-email") as HTMLInputElement).value;
-  const password = (document.getElementById("reg-password") as HTMLInputElement).value;
-  const username = (document.getElementById("reg-username") as HTMLInputElement).value;
+  const email = (document.getElementById("reg-email") as HTMLInputElement)
+    .value;
+  const password = (
+    document.getElementById("reg-password") as HTMLInputElement
+  ).value;
+  const username = (
+    document.getElementById("reg-username") as HTMLInputElement
+  ).value;
 
-  if (!validateAll(
-    validateEmail(email),
-    validatePassword(password),
-    validateUsername(username),
-  )) return;
+  const emailErr = validateEmail(email);
+  if (!emailErr.valid) {
+    authError.textContent = emailErr.error;
+    authError.style.display = "block";
+    return;
+  }
+
+  const passErr = validatePassword(password);
+  if (!passErr.valid) {
+    authError.textContent = passErr.error;
+    authError.style.display = "block";
+    return;
+  }
+
+  if (!username.trim()) {
+    authError.textContent = "Введите имя пользователя";
+    authError.style.display = "block";
+    return;
+  }
 
   try {
     const result = await authService.register({ email, password, username });
     localStorage.setItem("accessToken", result.accessToken);
     currentUser = result.user;
+    authError.style.display = "none";
     showDashboard();
   } catch (e) {
-    alert("Ошибка регистрации. Попробуйте другой email.");
+    authError.textContent = "Ошибка регистрации";
+    authError.style.display = "block";
   }
 });
 

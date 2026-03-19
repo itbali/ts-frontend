@@ -1,76 +1,70 @@
-/**
- * Модуль валидации — проверка пользовательского ввода перед отправкой на API
- */
+// Результат валидации — либо успех, либо ошибка с сообщением
+type ValidationResult =
+  | { valid: true; error: null }
+  | { valid: false; error: string };
 
-// --- Результат валидации ---
-
-export interface ValidationResult {
-  valid: boolean;
-  error?: string;
+function ok(): ValidationResult {
+  return { valid: true, error: null };
 }
 
-const ok: ValidationResult = { valid: true };
-const fail = (error: string): ValidationResult => ({ valid: false, error });
-
-// --- Email ---
+function fail(error: string): ValidationResult {
+  return { valid: false, error };
+}
 
 export function validateEmail(email: string): ValidationResult {
-  if (!email.trim()) return fail("Email обязателен");
-  const trimmed = email.trim();
-  if (!trimmed.includes("@")) return fail("Некорректный формат email");
-  const [local, domain] = trimmed.split("@");
-  if (!local || !domain) return fail("Некорректный формат email");
-  if (!domain.includes(".")) return fail("Некорректный формат email");
-  if (domain.startsWith(".") || domain.endsWith(".")) return fail("Некорректный формат email");
-  if (trimmed.includes(" ")) return fail("Email не должен содержать пробелов");
-  return ok;
+  if (!email.trim()) {
+    return fail("Введите email");
+  }
+  const parts = email.split("@");
+  if (parts.length !== 2 || !parts[0] || !parts[1].includes(".")) {
+    return fail("Некорректный email");
+  }
+  return ok();
 }
-
-// --- Password ---
 
 export function validatePassword(password: string): ValidationResult {
-  if (!password) return fail("Пароль обязателен");
-  if (password.length < 6) return fail("Пароль должен быть не менее 6 символов");
-  return ok;
+  if (!password) {
+    return fail("Введите пароль");
+  }
+  if (password.length < 6) {
+    return fail("Пароль должен быть не менее 6 символов");
+  }
+  return ok();
 }
-
-// --- Username ---
-
-export function validateUsername(username: string): ValidationResult {
-  if (!username.trim()) return fail("Имя пользователя обязательно");
-  if (username.trim().length < 2) return fail("Имя должно быть не менее 2 символов");
-  return ok;
-}
-
-// --- Habit title ---
 
 export function validateHabitTitle(title: string): ValidationResult {
-  if (!title.trim()) return fail("Название привычки обязательно");
-  if (title.trim().length < 2) return fail("Название должно быть не менее 2 символов");
-  if (title.trim().length > 100) return fail("Название не должно превышать 100 символов");
-  return ok;
+  const trimmed = title.trim();
+  if (!trimmed) {
+    return fail("Введите название привычки");
+  }
+  if (trimmed.length < 2) {
+    return fail("Название слишком короткое");
+  }
+  if (trimmed.length > 100) {
+    return fail("Название слишком длинное (макс. 100 символов)");
+  }
+  return ok();
 }
 
-// --- Category name ---
+// Валидация нескольких полей сразу
+export function validateForm<T extends Record<string, string>>(
+  data: T,
+  rules: { [K in keyof T]?: (value: T[K]) => ValidationResult }
+): { valid: boolean; errors: Partial<Record<keyof T, string>> } {
+  const errors: Partial<Record<keyof T, string>> = {};
 
-export function validateCategoryName(name: string): ValidationResult {
-  if (!name.trim()) return fail("Имя категории обязательно");
-  if (name.trim().length > 50) return fail("Имя категории не должно превышать 50 символов");
-  return ok;
-}
+  for (const key in rules) {
+    const validate = rules[key];
+    if (!validate) continue;
 
-// --- Утилита: валидация с алертом ---
-
-/**
- * Валидирует несколько результатов и показывает первую ошибку через alert.
- * Возвращает true если все проверки пройдены.
- */
-export function validateAll(...results: ValidationResult[]): boolean {
-  for (const r of results) {
-    if (!r.valid) {
-      alert(r.error || "Ошибка валидации");
-      return false;
+    const result = validate(data[key]);
+    if (!result.valid) {
+      errors[key] = result.error;
     }
   }
-  return true;
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors,
+  };
 }
